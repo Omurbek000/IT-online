@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = True
@@ -13,7 +14,7 @@ ALLOWED_HOSTS = ["*"]
 
 
 INSTALLED_APPS = [
-    "modeltranslation"
+    # "modeltranslation"
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
