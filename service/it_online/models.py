@@ -1,10 +1,10 @@
 from datetime import timedelta
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-
+from phonenumber_field.modelfields import PhoneNumberField
 
 class UserProfile(AbstractUser):
-    profile_image = models.ImageField(upload_to="profile_image/")
+    profile_image = models.ImageField(upload_to="profile_image/", null=True, blank=True)
     bio = models.TextField()
     ROLE_CHOICES = (
         ("student", "Student"),
@@ -14,6 +14,26 @@ class UserProfile(AbstractUser):
 
     def __str__(self):
         return f"{self.first_name} {self.role}"
+
+
+class Teacher(models.Model):
+    user = models.ForeignKey(
+        UserProfile,
+        on_delete=models.CASCADE,
+    )
+    bio = models.TextField(max_length=64, null=True, blank=True)
+    experience_years = models.PositiveIntegerField(default=0)
+    specialization = models.CharField(max_length=64)
+    rating = models.PositiveSmallIntegerField(
+        choices=[(i, str(i)) for i in range(1, 6)], null=True, blank=True
+    )
+    profile_image = models.ImageField(
+        upload_to="teacher_profiles/", null=True, blank=True
+    )
+    phone_number = PhoneNumberField(region="KG", null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.bio} — {self.specialization}"
 
 
 class Category(models.Model):
@@ -61,12 +81,28 @@ class Course(models.Model):
         return f"{self.course_name} - {self.level}"
 
 
+class Student(models.Model):
+    user = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE)
+    bio = models.TextField(max_length=64, null=True, blank=True)
+    enrolled_courses = models.ForeignKey(Course, on_delete=models.CASCADE)
+    progress = models.TextField(null=True, blank=True)
+    certificate_count = models.PositiveIntegerField(default=0)
+    profile_image = models.ImageField(
+        upload_to="student_profiles/", null=True, blank=True
+    )
+    phone_number = PhoneNumberField(region="KG", null=True, blank=True)
+
+    def __str__(self):
+        return f'{self.user}-{self.progress}'
+
+
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     title = models.CharField(max_length=64)
     video_lesson = models.FileField(upload_to="lesson_video/", null=True, blank=True)
     content = models.TextField(null=True, blank=True)
-    docs_lesson = models.FileField(upload_to="lesson_docs/")
+    docs_lesson = models.FileField(upload_to="lesson_docs/", null=True, blank=True)
 
     def __str__(self):
         return f"{self.title}-{self.course}-{self.content}"
@@ -95,7 +131,9 @@ class Certificate(models.Model):
     student = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     issued_at = models.DateField()
-    certificate_url = models.FileField(upload_to="certificate/")
+    certificate_url = models.FileField(
+        upload_to="certificate/",
+    )
 
     def __str__(self):
         return f"{self.student} - {self.course} - {self.issued_at}"

@@ -14,7 +14,7 @@ ALLOWED_HOSTS = ["*"]
 
 
 INSTALLED_APPS = [
-    # "modeltranslation"
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -23,16 +23,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'it_online',
     'rest_framework',
-    "phonenumber_field",
-    "django_filters",
-    "drf_yasg",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.github",
-    "allauth.socialaccount.providers.google",
-    "rest_framework_simplejwt", 
-    "rest_framework_simplejwt.token_blacklist",
+    'phonenumber_field',
+    'django_filters',
+    'drf_yasg',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.google',
+    'rest_framework_simplejwt', 
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -99,14 +99,23 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
+LANGUAGES = (
+    ('ru', 'Русский'),
+    ('en', 'English'),
+    ('ky', 'Кыргызча'),
+)
+
+MODELTRANSLATION_DEFAULT_LANGUAGE = 'ru'
 
 
 

@@ -1,7 +1,11 @@
 settings.py()
 settings-urls.py()
-models.py()
-serializers.py()
-views.py()
-migrate()
-runserver()
+models.py() + teacher student
+serializers.py() + teacher student
+views.py() + teacher student
+migrate() + 
+runserver() +
+permisions.py()
+urls.py() router
+admin.py() +
+translation.py() +
