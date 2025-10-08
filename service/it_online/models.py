@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 class UserProfile(AbstractUser):
     profile_image = models.ImageField(upload_to="profile_image/", null=True, blank=True)
     bio = models.TextField()
@@ -82,8 +83,7 @@ class Course(models.Model):
 
 
 class Student(models.Model):
-    user = models.ForeignKey(
-        UserProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     bio = models.TextField(max_length=64, null=True, blank=True)
     enrolled_courses = models.ForeignKey(Course, on_delete=models.CASCADE)
     progress = models.TextField(null=True, blank=True)
@@ -94,7 +94,7 @@ class Student(models.Model):
     phone_number = PhoneNumberField(region="KG", null=True, blank=True)
 
     def __str__(self):
-        return f'{self.user}-{self.progress}'
+        return f"{self.user}-{self.progress}"
 
 
 class Lesson(models.Model):
@@ -109,6 +109,7 @@ class Lesson(models.Model):
 
 
 class Assignment(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     title = models.CharField(max_length=32)
     description = models.TextField()
@@ -121,10 +122,29 @@ class Assignment(models.Model):
 
 class Exam(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    title = models.CharField(max_length=64)
-    questions = models.CharField(max_length=64)
-    passing_score = models.PositiveSmallIntegerField()
+    exam_name = models.CharField(max_length=64)
     duration = models.DurationField(default=timedelta(hours=1))
+
+    def __str__(self):
+        return f"{self.exam_name} - {self.course}"
+
+
+class Questions(models.Model):
+    exam = models.ForeignKey(Exam, on_delete=models.CASCADE)
+    question_title = models.CharField(max_length=64)
+    passing_score = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return f"{self.question_title}-{self.exam}"
+
+
+class Option(models.Model):
+    questions = models.ForeignKey(Questions, on_delete=models.CASCADE)
+    option_title = models.CharField(max_length=32)
+    answer = models.BooleanField()
+
+    def __str__(self):
+        return f"{self.questions} - {self.option_title}"
 
 
 class Certificate(models.Model):
@@ -147,3 +167,21 @@ class Review(models.Model):
         choices=[(i, str(i)) for i in range(1, 6)], null=True, blank=True
     )
     created_date = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.course}-{self.student}"
+
+
+class Cart(models.Model):
+    user = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user} "
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.course} - {self.cart__user}"

@@ -1,9 +1,10 @@
 from django.contrib import admin
 from .models import *
-from modeltranslation.admin import TranslationAdmin
+from modeltranslation.admin import TranslationAdmin, TranslationInlineModelAdmin
 
 
-@admin.register(UserProfile)
+@admin.register(UserProfile, Teacher, Student, 
+                Exam, Questions, Option, Review,)
 class UserProfileAdmin(TranslationAdmin):
     class Media:
         js = (
@@ -16,34 +17,16 @@ class UserProfileAdmin(TranslationAdmin):
         }
 
 
-@admin.register(Teacher)
-class TeacherAdmin(TranslationAdmin):
-    class Media:
-        js = (
-            "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
-            "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js",
-            "modeltranslation/js/tabbed_translation_fields.js",
-        )
-        css = {
-            "screen": ("modeltranslation/css/tabbed_translation_fields.css",),
-        }
-
-
-@admin.register(Student)
-class StudentAdmin(TranslationAdmin):
-    class Media:
-        js = (
-            "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
-            "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js",
-            "modeltranslation/js/tabbed_translation_fields.js",
-        )
-        css = {
-            "screen": ("modeltranslation/css/tabbed_translation_fields.css",),
-        }
+#! for subcategory and category models бир бирине тез кошуу учун
+class SubCategoryInline(admin.TabularInline, TranslationInlineModelAdmin):
+    model = SubCategory
+    extra = 1
 
 
 @admin.register(Category)
 class CategoryAdmin(TranslationAdmin):
+    inlines = [SubCategoryInline]
+
     class Media:
         js = (
             "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
@@ -55,73 +38,23 @@ class CategoryAdmin(TranslationAdmin):
         }
 
 
-@admin.register(SubCategory)
-class SubCategoryAdmin(TranslationAdmin):
-    class Media:
-        js = (
-            "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
-            "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js",
-            "modeltranslation/js/tabbed_translation_fields.js",
-        )
-        css = {
-            "screen": ("modeltranslation/css/tabbed_translation_fields.css",),
-        }
+class LessonInline(admin.TabularInline, TranslationInlineModelAdmin):
+    model = Lesson
+    extra = 1
+
+
+class AssignmentInline(admin.TabularInline, TranslationInlineModelAdmin):
+    model = Assignment
+    extra = 1
 
 
 @admin.register(Course)
 class CourseAdmin(TranslationAdmin):
-    class Media:
-        js = (
-            "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
-            "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js",
-            "modeltranslation/js/tabbed_translation_fields.js",
-        )
-        css = {
-            "screen": ("modeltranslation/css/tabbed_translation_fields.css",),
-        }
+    inlines = [
+        LessonInline,
+        AssignmentInline,
+    ]
 
-
-@admin.register(Lesson)
-class LessonAdmin(TranslationAdmin):
-    class Media:
-        js = (
-            "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
-            "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js",
-            "modeltranslation/js/tabbed_translation_fields.js",
-        )
-        css = {
-            "screen": ("modeltranslation/css/tabbed_translation_fields.css",),
-        }
-
-
-@admin.register(Assignment)
-class AssignmentAdmin(TranslationAdmin):
-    class Media:
-        js = (
-            "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
-            "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js",
-            "modeltranslation/js/tabbed_translation_fields.js",
-        )
-        css = {
-            "screen": ("modeltranslation/css/tabbed_translation_fields.css",),
-        }
-
-
-@admin.register(Exam)
-class ExamAdmin(TranslationAdmin):
-    class Media:
-        js = (
-            "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
-            "http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js",
-            "modeltranslation/js/tabbed_translation_fields.js",
-        )
-        css = {
-            "screen": ("modeltranslation/css/tabbed_translation_fields.css",),
-        }
-
-
-@admin.register(Review)
-class ReviewAdmin(TranslationAdmin):
     class Media:
         js = (
             "http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js",
@@ -135,7 +68,13 @@ class ReviewAdmin(TranslationAdmin):
 
 @admin.register(Certificate)
 class CertificateAdmin(admin.ModelAdmin):
-    list_display = [
-        "student",
-        "course",
-    ]
+    pass
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(CartItem)
+class CartItemAdmin(admin.ModelAdmin):
+    pass
