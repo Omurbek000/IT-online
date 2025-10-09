@@ -15,6 +15,7 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'modeltranslation',
+    'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -26,6 +27,8 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'django_filters',
     'drf_yasg',
+    'nested_admin',
+    'multiselectfield',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -127,6 +130,16 @@ MEDIA_URL = "/media/"
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+LOGIN_REDIRECT_URL = '/'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = True
 
 
 AUTH_USER_MODEL = "it_online.UserProfile"

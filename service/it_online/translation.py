@@ -54,8 +54,6 @@ class CourseTranslationOptions(TranslationOptions):
     fields = (
         "course_name",
         "descriptions",
-        "level",
-        "language_course",
     )
 
 

@@ -22,7 +22,10 @@ from django.conf.urls.i18n import i18n_patterns
 
 
 urlpatterns = i18n_patterns(
+    path('grappelli/', include('grappelli.urls')),
+    path('nested_admin/', include('nested_admin.urls')),
     path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
     path('', include('it_online.urls')),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
